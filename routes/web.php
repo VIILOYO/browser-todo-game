@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Characteristic\CharacteristicController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
+    Route::get('/registration', [AuthController::class, 'registration'])->name('registration');
+    Route::post('/accept-registration', [AuthController::class, 'acceptRegistration'])->name('accept-registration');
+});
+
+
+Route::group(['prefix' => 'characteristics', 'as' => 'characteristics.'], function () {
+    Route::get('/', [CharacteristicController::class, 'index'])->name('get');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 });
