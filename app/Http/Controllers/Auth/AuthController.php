@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Domain\DTO\Auth\LoginData;
 use App\Domain\DTO\Auth\RegisterData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\Auth\AuthService;
 use Illuminate\Http\RedirectResponse;
@@ -45,6 +47,34 @@ class AuthController extends Controller
         if ($user === null) {
             return redirect()->back()->withErrors([
                 'auth-error' => __('errors.auth.register-fault')
+            ])->withInput($request->input());
+        }
+
+        Auth::login($user);
+
+        return redirect()->route('profile');
+    }
+
+    /**
+     * @return View
+     */
+    public function login(): View
+    {
+        return view('auth.login')
+            ->with(['title' => 'Авторизация']);
+    }
+
+    public function acceptLogin(LoginRequest $request): RedirectResponse
+    {
+        $user = $this->authService->login(
+            new LoginData(
+                $request->validated()
+            )
+        );
+
+        if ($user === null) {
+            return redirect()->back()->withErrors([
+                'auth-error' => __('errors.auth.login-fault')
             ])->withInput($request->input());
         }
 

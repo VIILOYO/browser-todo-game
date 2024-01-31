@@ -17,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-    Route::get('/registration', [AuthController::class, 'registration'])->name('registration');
-    Route::post('/accept-registration', [AuthController::class, 'acceptRegistration'])->name('accept-registration');
+    Route::group(['middleware' => 'guest'], function () {
+        Route::get('/registration', [AuthController::class, 'registration'])->name('registration');
+        Route::post('/accept-registration', [AuthController::class, 'acceptRegistration'])->name('accept-registration');
+        Route::get('/login', [AuthController::class, 'login'])->name('login');
+        Route::post('/accept-login', [AuthController::class, 'acceptLogin'])->name('accept-login');
+    });
 });
-
 
 Route::group(['prefix' => 'characteristics', 'as' => 'characteristics.'], function () {
     Route::get('/', [CharacteristicController::class, 'index'])->name('get');

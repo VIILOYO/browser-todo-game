@@ -2,7 +2,16 @@
 
 namespace App\Domain\DTO\Auth;
 
-class LoginData
-{
+use App\Domain\DTO\Abstracts\DTO;
 
+class LoginData extends DTO
+{
+    /**
+     * @var string
+     */
+    public string $email;
+    /**
+     * @var string
+     */
+    public string $password;
 }

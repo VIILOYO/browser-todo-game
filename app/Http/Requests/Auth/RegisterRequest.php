@@ -13,7 +13,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $this->id,
+            'email' => 'required|email|max:255|unique:users,email' . $this->id,
             'password' => 'required|string|min:5|max:255|confirmed',
         ];
     }
